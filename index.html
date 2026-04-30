@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Github Finder</title>
+    <link rel="icon" type="image/png" href="github_logo.png" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+      <a class="nav-logo" href="#">
+        <i class="fa-brands fa-github"></i>
+        <span>GitHub<strong>Finder</strong></span>
+      </a>
+
+      <button
+        class="theme-toggle"
+        id="themeToggle"
+        aria-label="Toggle dark mode"
+      >
+        <span class="toggle-icons">
+          <i class="fa fa-sun"></i>
+          <i class="fa fa-moon"></i>
+        </span>
+        <span class="toggle-track">
+          <span class="toggle-thumb"></span>
+        </span>
+        <span class="toggle-label" id="themeLabel">Light</span>
+      </button>
+    </nav>
+    <!-- ////////// -->
+
+    <div class="container">
+      <!-- Search bar -->
+      <div class="input_wrapper">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Enter github username..."
+          class="input_user"
+        />
+        <div class="btn_submit" id="searchBtn">
+          <i class="fa fa-search"></i> Search
+        </div>
+      </div>
+
+      <!-- Welcome state -->
+      <div id="welcomeState" class="state-panel welcome-panel">
+        <i class="fa-brands fa-github welcome-icon"></i>
+        <h2>GitHub Finder</h2>
+        <p>
+          Search for any GitHub user to view their profile and repositories.
+        </p>
+        <p class="hint">
+          Try: <span>torvalds</span> or <span>gvanrossum</span>
+        </p>
+      </div>
+
+      <!-- Loading state -->
+      <div id="loadingState" class="state-panel loading-panel hidden">
+        <div class="loader">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        <p>Searching GitHub...</p>
+      </div>
+
+      <!-- Error state -->
+      <div id="errorState" class="state-panel error-panel hidden">
+        <i class="fa fa-circle-exclamation error-icon"></i>
+        <p id="errorMessage">User not found.</p>
+      </div>
+
+      <!-- Results -->
+      <div class="row hidden" id="resultsRow">
+        <div class="user_info">
+          <div class="user_img">
+            <img id="userAvatar" src="" alt="avatar" />
+          </div>
+          <div class="user_name">
+            <h3>Login Name</h3>
+            <h1 id="userLogin"></h1>
+          </div>
+          <p id="userBio" class="user_bio"></p>
+          <div class="follow">
+            <div class="item followers_">
+              <p>Followers</p>
+              <span id="followersCount">0</span>
+            </div>
+            <div class="item follow_">
+              <p>Following</p>
+              <span id="followingCount">0</span>
+            </div>
+            <div class="item">
+              <p>Repos</p>
+              <span id="reposCount">0</span>
+            </div>
+          </div>
+          <!-- Bookmarks section -->
+          <div class="bookmarks-section">
+            <button id="addBookmarkBtn" class="bookmark-btn">
+              <i class="fa fa-bookmark"></i> Save Profile
+            </button>
+            <button id="viewBookmarksBtn" class="bookmark-btn secondary">
+              <i class="fa fa-list"></i> Bookmarks
+              <span id="bookmarkCount" class="badge">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="repo">
+          <h1>Repositories</h1>
+          <div id="reposList" class="repo_details">
+            <!-- repos injected here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Bookmarks panel -->
+      <div id="bookmarksList" class="bookmarks-panel hidden">
+        <h2><i class="fa fa-bookmark"></i> Saved Profiles</h2>
+        <div id="bookmarksContainer"></div>
+      </div>
+    </div>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
