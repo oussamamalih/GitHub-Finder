@@ -74,10 +74,6 @@ const testRepos = {
   ],
 };
 
-// ==================== CONFIG ====================
-
-const GITHUB_TOKEN = CONFIG.GITHUB_TOKEN;
-
 // ==================== STATE ====================
 
 const state = {
@@ -122,11 +118,8 @@ themeToggle.addEventListener("click", () => {
 
 // ==================== API HELPER ====================
 
-// Headers katban dynamiquement — ila token khawi, maysifetch-sh Authorization
 function getHeaders() {
-  const headers = { Accept: "application/vnd.github+json" };
-  if (GITHUB_TOKEN) headers["Authorization"] = `Bearer ${GITHUB_TOKEN}`;
-  return headers;
+  return { Accept: "application/vnd.github+json" };
 }
 
 // ==================== DISPLAY FUNCTIONS ====================
@@ -212,7 +205,6 @@ function saveBookmarks() {
 
 function addBookmark() {
   if (!state.currentUser) return;
-
   const exists = state.bookmarks.some(
     (b) => b.login === state.currentUser.login,
   );
@@ -223,7 +215,6 @@ function addBookmark() {
     }, 1500);
     return;
   }
-
   state.bookmarks.push(state.currentUser);
   saveBookmarks();
   addBookmarkBtn.innerHTML = '<i class="fa fa-check"></i> Saved!';
@@ -243,11 +234,9 @@ function showBookmarks() {
     showError("No bookmarks yet. Search a user and save their profile!");
     return;
   }
-
   hideAll();
   bookmarksList.classList.remove("hidden");
   bookmarksContainer.innerHTML = "";
-
   state.bookmarks.forEach((user) => {
     const item = document.createElement("div");
     item.classList.add("bookmark-item");
@@ -266,7 +255,6 @@ function showBookmarks() {
     `;
     bookmarksContainer.appendChild(item);
   });
-
   document.querySelectorAll(".load-bookmark-btn").forEach((btn) => {
     btn.addEventListener("click", () => searchUser(btn.dataset.login));
   });
@@ -279,12 +267,10 @@ function showBookmarks() {
 
 function searchUser(username) {
   showLoading();
-
   setTimeout(() => {
     const localUser = testUsers.find(
       (u) => u.login.toLowerCase() === username.toLowerCase(),
     );
-
     if (localUser) {
       state.currentUser = localUser;
       displayUserProfile(localUser);
@@ -296,12 +282,13 @@ function searchUser(username) {
 }
 
 function fetchFromAPI(username) {
-  // ✅ getHeaders() katban f kol request — token katdkhel mzyan
   fetch(`https://api.github.com/users/${username}`, { headers: getHeaders() })
     .then((res) => res.json())
     .then((data) => {
       if (data.message && data.message.includes("rate limit")) {
-        showError("Rate limit reached. Add a valid GitHub token in app.js.");
+        showError(
+          "Rate limit reached. Please wait a few minutes and try again.",
+        );
         return null;
       }
       if (data.message === "Not Found") {
@@ -310,7 +297,6 @@ function fetchFromAPI(username) {
       }
       state.currentUser = data;
       displayUserProfile(data);
-      // ✅ Headers katkhdmo f repos fetch também
       return fetch(`https://api.github.com/users/${username}/repos`, {
         headers: getHeaders(),
       });
