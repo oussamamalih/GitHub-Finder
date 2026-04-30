@@ -1,4 +1,0 @@
-const CONFIG = {
-  GITHUB_TOKEN:
-    "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",
-};
