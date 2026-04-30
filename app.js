@@ -2,7 +2,7 @@
 
 const testUsers = [
   {
-    login: "torvalds",
+    login: "wilr",
     avatar_url: "https://avatars.githubusercontent.com/u/1024588?v=4",
     bio: "Linux creator",
     followers: 200000,
@@ -10,7 +10,7 @@ const testUsers = [
     public_repos: 50,
   },
   {
-    login: "gvanrossum",
+    login: "natsho",
     avatar_url: "https://avatars.githubusercontent.com/u/6490553?v=4",
     bio: "Python creator",
     followers: 50000,
@@ -20,7 +20,7 @@ const testUsers = [
 ];
 
 const testRepos = {
-  torvalds: [
+  wilr: [
     {
       name: "linux",
       description: "Linux kernel source tree",
@@ -46,7 +46,7 @@ const testRepos = {
       html_url: "https://github.com/torvalds/test-tlb",
     },
   ],
-  gvanrossum: [
+  natsho: [
     {
       name: "cpython",
       description: "The Python programming language",
