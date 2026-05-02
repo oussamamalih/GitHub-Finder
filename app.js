@@ -116,12 +116,6 @@ themeToggle.addEventListener("click", () => {
   applyTheme(current === "dark" ? "light" : "dark");
 });
 
-// ==================== API HELPER ====================
-
-function getHeaders() {
-  return { Accept: "application/vnd.github+json" };
-}
-
 // ==================== DISPLAY FUNCTIONS ====================
 
 function displayUserProfile(user) {
@@ -161,7 +155,7 @@ function displayRepositories(repos) {
       </div>
       ${repo.description ? `<p class="repo_desc">${repo.description}</p>` : ""}
       <div class="repo_details_">
-        ${repo.language ? `<div class="info_ lang"><span class="lang-dot" style="background:${getLanguageColor(repo.language)}"></span>${repo.language}</div>` : ""}
+        ${repo.language ? `<div class="info_"><span class="lang-dot" style="background:${getLanguageColor(repo.language)}"></span>${repo.language}</div>` : ""}
         <div class="info_"><i class="fa fa-star-o"></i> ${formatNumber(repo.stargazers_count)}</div>
         <div class="info_"><i class="fa fa-code-fork"></i> ${formatNumber(repo.forks_count)}</div>
       </div>
@@ -282,7 +276,8 @@ function searchUser(username) {
 }
 
 function fetchFromAPI(username) {
-  fetch(`https://api.github.com/users/${username}`, { headers: getHeaders() })
+  const headers = { Accept: "application/vnd.github+json" };
+  fetch(`https://api.github.com/users/${username}`, { headers })
     .then((res) => res.json())
     .then((data) => {
       if (data.message && data.message.includes("rate limit")) {
@@ -298,7 +293,7 @@ function fetchFromAPI(username) {
       state.currentUser = data;
       displayUserProfile(data);
       return fetch(`https://api.github.com/users/${username}/repos`, {
-        headers: getHeaders(),
+        headers,
       });
     })
     .then((res) => res && res.json())
