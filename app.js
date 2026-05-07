@@ -275,32 +275,54 @@ function searchUser(username) {
   }, 800);
 }
 
-function fetchFromAPI(username) {
-  const headers = { Accept: "application/vnd.github+json" };
-  fetch(`https://api.github.com/users/${username}`, { headers })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.message && data.message.includes("rate limit")) {
-        showError(
-          "Rate limit reached. Please wait a few minutes and try again.",
-        );
-        return null;
-      }
-      if (data.message === "Not Found") {
-        showError(`User "${username}" not found on GitHub.`);
-        return null;
-      }
-      state.currentUser = data;
-      displayUserProfile(data);
-      return fetch(`https://api.github.com/users/${username}/repos`, {
-        headers,
-      });
-    })
-    .then((res) => res && res.json())
-    .then((repos) => {
-      if (repos) displayRepositories(repos);
-    })
-    .catch(() => showError("Network error. Please try again."));
+async function fetchFromAPI(username) {
+  try {
+    // headers for GitHub API
+    const headers = {
+      Accept: "application/vnd.github+json",
+    };
+
+    // fetch user profile
+    const res = await fetch(`https://api.github.com/users/${username}`, {
+      headers,
+    });
+
+    // convert response to JSON
+    const data = await res.json();
+
+    // check rate limit
+    if (data.message && data.message.includes("rate limit")) {
+      showError("Rate limit reached. Please wait a few minutes and try again.");
+      return;
+    }
+
+    // check if user exists
+    if (data.message === "Not Found") {
+      showError(`User "${username}" not found on GitHub.`);
+      return;
+    }
+
+    // save current user
+    state.currentUser = data;
+
+    // display profile
+    displayUserProfile(data);
+
+    // fetch repositories
+    const reposRes = await fetch(
+      `https://api.github.com/users/${username}/repos`,
+      { headers },
+    );
+
+    // convert repos to JSON
+    const repos = await reposRes.json();
+
+    // display repositories
+    displayRepositories(repos);
+  } catch (error) {
+    // handle network errors
+    showError("Network error. Please try again.");
+  }
 }
 
 // ==================== UTILS ====================
