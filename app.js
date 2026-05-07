@@ -277,47 +277,37 @@ function searchUser(username) {
 
 async function fetchFromAPI(username) {
   try {
-    // headers for GitHub API
     const headers = {
       Accept: "application/vnd.github+json",
     };
 
-    // fetch user profile
     const res = await fetch(`https://api.github.com/users/${username}`, {
       headers,
     });
 
-    // convert response to JSON
     const data = await res.json();
 
-    // check rate limit
     if (data.message && data.message.includes("rate limit")) {
       showError("Rate limit reached. Please wait a few minutes and try again.");
       return;
     }
 
-    // check if user exists
     if (data.message === "Not Found") {
       showError(`User "${username}" not found on GitHub.`);
       return;
     }
 
-    // save current user
     state.currentUser = data;
 
-    // display profile
     displayUserProfile(data);
 
-    // fetch repositories
     const reposRes = await fetch(
       `https://api.github.com/users/${username}/repos`,
       { headers },
     );
 
-    // convert repos to JSON
     const repos = await reposRes.json();
 
-    // display repositories
     displayRepositories(repos);
   } catch (error) {
     // handle network errors
